@@ -1,11 +1,12 @@
 import express, { Request, Response, Router } from 'express';
-import { FileOpsUtil } from '../io/FileOpsUtil';
+
+import { StudentService } from '../service/StudentService';
 import { Student } from '../model/Student';
 
 export class StudentController {
 
     private studentRouter: Router;
-    private static students: Set<Student>;
+    private studentService: StudentService =  new StudentService();
 
     constructor() {
         this.studentRouter = express.Router();
@@ -13,32 +14,36 @@ export class StudentController {
         this.studentRouter.get('/getAll', this.getAllStudents);
         this.studentRouter.get('/get/:id', this.getStudentById);
         this.studentRouter.put('/update', this.updateStudent);
-        this.studentRouter.delete('/delete', this.deleteStudent);
+        this.studentRouter.delete('/delete/:id', this.deleteStudent);
     }
 
     public static async init() {
-        let fileContent = await FileOpsUtil.loadDataFromFile('./students.json');
-        StudentController.students = JSON.parse(fileContent);
+        StudentService.init();
     }
 
     addStudent = (req: Request, res: Response) => {
-        throw new Error('Method not implemented.');
+        let student = req.body as unknown as Student;
+        res.status(200).send(this.studentService.addStudent(student));
     }
 
     getAllStudents = (req: Request, res: Response) => {
-        res.status(200).send(StudentController.students);
+        res.status(200).send(this.studentService.getAllStudents());
     }
 
     getStudentById = (req: Request, res: Response) => {
-        throw new Error('Method not implemented.');
+        let rollNo = req.params.id;
+        res.status(200).send(this.studentService.getStudentById(rollNo));
     }
 
     updateStudent = (req: Request, res: Response) => {
-        throw new Error('Method not implemented.');
+        let student = req.body as unknown as Student;
+        res.status(200).send(this.studentService.updateStudent(student));
     }
 
     deleteStudent = (req: Request, res: Response) => {
-        throw new Error('Method not implemented.');
+        let rollNo = req.params.id;
+        this.studentService.deleteStudent(rollNo)
+        res.status(200).send();
     }
 
     public get router(): Router {

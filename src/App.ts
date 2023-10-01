@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import express, { Application } from 'express';
+
 import { StudentController } from './controller/StudentController';
 
 export class App {

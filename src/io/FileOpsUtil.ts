@@ -15,4 +15,14 @@ export class FileOpsUtil {
 
         return fileContentStr;
     }
+
+    public static loadDataToFile(filePath: string, fileContent: object) {
+        let fileContentStr = JSON.stringify(fileContent);
+
+        try {
+            promises.writeFile(filePath, fileContentStr);
+        } catch(err) {
+            console.log(err);
+        }
+    }
 }
