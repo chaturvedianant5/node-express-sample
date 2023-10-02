@@ -11,7 +11,7 @@ export class StudentService {
         let fileContent = await FileOpsUtil.loadDataFromFile(this.STUDENTS_FILE_LOCATION) ?? '';
         
         try {
-            StudentService.studentsSet = JSON.parse(fileContent);
+            StudentService.studentsSet = new Set(JSON.parse(fileContent));
         } catch(err) {
             console.log(err);
         }
